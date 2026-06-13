@@ -1,0 +1,15 @@
+# 環境変数（パスワード等を含むためコミットしない）
+.env
+
+# OS / エディタ
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# 検証用アーティファクト（スクリーンショット等）
+.playwright-mcp/
+m4-*.png
+
+# WordPress 本体とDBは名前付きボリューム管理のためリポジトリには含まれません
+# （カスタムテーマ wordpress/themes/mini4wd と mu-plugins はバージョン管理対象）
