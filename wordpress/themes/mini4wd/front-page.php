@@ -33,14 +33,22 @@ $next = [
 get_header();
 ?>
 
-<!-- ヒーロー（メインビジュアル画像 mv.png。文言は画像に焼き込み済み） -->
-<section class="hero hero--image">
-    <div class="container">
-        <img class="hero__img"
-             src="<?php echo esc_url(get_theme_file_uri('assets/images/mv.png')); ?>"
-             width="1806" height="871"
-             alt="<?php echo esc_attr($hero['title'] . ' ' . $hero['sub'] . ' — ' . $hero['tag']); ?>">
+<!-- ヒーロー（背景写真＋HTML大タイポ） -->
+<section class="hero">
+    <div class="hero__media"><img src="<?php echo esc_url(get_theme_file_uri('assets/images/mv.png')); ?>" alt="" aria-hidden="true"></div>
+    <div class="hero__streak" aria-hidden="true"></div>
+    <div class="container hero__in">
+        <span class="kicker">From Nichinan City &middot; Est. Study Club</span>
+        <h1 class="hero__title">
+            <span class="l1">Mini</span>
+            <span class="l2">4<b>WD</b> Lab</span>
+        </h1>
+        <div class="hero__row">
+            <p class="hero__ja"><?php echo esc_html($hero['title']); ?><small><?php echo esc_html($hero['tag']); ?></small></p>
+            <p class="hero__slogan"><?php echo esc_html($hero['slogan']); ?></p>
+        </div>
     </div>
+    <span class="scroll" aria-hidden="true">Scroll &darr;</span>
 </section>
 
 <!-- NEXT ROUND -->
