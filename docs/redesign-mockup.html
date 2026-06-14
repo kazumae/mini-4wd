@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ミニ四駆学習会 — Redesign Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@500;600;700;800;900&family=Saira:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   REDESIGN MOCKUP — "EDITORIAL MOTORSPORT"
+   現状(Oswald/赤一色/高密度/1120px) からの刷新提案。
+   実装テーマではなく、方向性を体感するための単一ファイル試作。
+   ============================================================ */
+:root{
+  /* — Color — ウォームな紙白 × 黒鉛 × ブランド赤 × ボルト(スピードのアクセント) */
+  --paper:#f3f1ea;       /* 温かみのあるオフホワイト地 */
+  --paper-2:#e9e6dc;
+  --ink:#0c0d10;         /* ほぼ黒 */
+  --ink-soft:#16181d;
+  --red:#ff2a1f;         /* 既存#e2001aを継承しつつ鮮度UP */
+  --volt:#d8ff37;        /* ライム=スピード/電光のアクセント */
+  --smoke:#7e8794;
+  --line:rgba(12,13,16,.12);
+
+  /* — Type — 可変ワイドの英字 × モダンな日本語 × スポーツ調の数字 */
+  --display:'Archivo Expanded','Zen Kaku Gothic New',sans-serif;
+  --jp:'Zen Kaku Gothic New',sans-serif;
+  --mono:'Saira',sans-serif;
+
+  --maxw:1320px;         /* 1120 → 広く */
+  --read:760px;          /* 本文の可読幅は別に絞る */
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--jp);line-height:1.8;font-size:16px;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(20px,5vw,64px)}
+
+/* ---- ノイズ＋グリッドの薄い地紋（のっぺり回避） ---- */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background:
+    linear-gradient(var(--line) 1px,transparent 1px) 0 0/100% 88px,
+    radial-gradient(circle at 1px 1px, rgba(12,13,16,.05) 1px, transparent 0) 0 0/24px 24px;
+  mask-image:linear-gradient(180deg,transparent,#000 12%,#000 92%,transparent);
+}
+main{position:relative;z-index:1}
+
+/* ============== Header ============== */
+.hd{position:fixed;inset:0 0 auto 0;z-index:50;mix-blend-mode:difference;color:#fff}
+.hd__in{display:flex;align-items:center;gap:24px;height:74px}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:800;letter-spacing:.06em;font-size:18px}
+.logo .dot{width:11px;height:11px;background:var(--red);border-radius:50%}
+.hd nav{margin-left:auto;display:flex;gap:30px;font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.hd nav a{position:relative;padding:4px 0}
+.hd nav a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:2px;background:currentColor;transition:right .35s var(--ease)}
+.hd nav a:hover::after{right:0}
+
+/* ============== Hero ============== */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  background:radial-gradient(120% 90% at 80% 10%,#1b1e24,#070809 60%);color:#fff;overflow:hidden}
+.hero__media{position:absolute;inset:0;z-index:0}
+.hero__media img{width:100%;height:100%;object-fit:cover;opacity:.42;
+  filter:contrast(1.08) saturate(1.1);mix-blend-mode:luminosity;
+  transform:scale(1.06);animation:slowzoom 14s var(--ease) forwards}
+@keyframes slowzoom{to{transform:scale(1)}}
+.hero__media::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(7,8,9,.2),transparent 30%,rgba(7,8,9,.85))}
+/* 斜めのスピードライン */
+.hero__streak{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(108deg,transparent 0 78px,rgba(216,255,55,.07) 78px 80px)}
+.hero__in{position:relative;z-index:2;padding-bottom:clamp(40px,7vw,90px)}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:600;
+  letter-spacing:.34em;text-transform:uppercase;font-size:12px;color:var(--volt);
+  opacity:0;animation:rise .8s var(--ease) .1s forwards}
+.kicker::before{content:"";width:34px;height:1px;background:var(--volt)}
+.hero h1{font-family:var(--display);font-weight:900;line-height:.84;letter-spacing:-.02em;
+  font-size:clamp(64px,15vw,230px);margin:.12em 0 0;text-transform:uppercase}
+.hero h1 span{display:block}
+.hero h1 .l1{opacity:0;animation:rise .9s var(--ease) .18s forwards}
+.hero h1 .l2{color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.55);
+  opacity:0;animation:rise .9s var(--ease) .30s forwards}
+.hero h1 .l2 b{color:var(--red);-webkit-text-stroke:0}
+.hero__row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:24px 48px;margin-top:clamp(20px,3vw,40px)}
+.hero__ja{font-family:var(--jp);font-weight:700;font-size:clamp(18px,2.4vw,26px);letter-spacing:.04em;
+  opacity:0;animation:rise .9s var(--ease) .42s forwards}
+.hero__ja small{display:block;color:var(--smoke);font-weight:500;font-size:.62em;letter-spacing:.18em;margin-top:6px}
+.hero__slogan{margin-left:auto;max-width:30ch;color:#cfd3da;font-size:15px;line-height:1.9;
+  border-left:2px solid var(--red);padding-left:18px;
+  opacity:0;animation:rise .9s var(--ease) .54s forwards}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.scroll{position:absolute;right:clamp(20px,5vw,64px);bottom:30px;z-index:2;font-family:var(--mono);
+  font-size:11px;letter-spacing:.3em;writing-mode:vertical-rl;color:var(--smoke);text-transform:uppercase}
+
+/* ============== Reveal util ============== */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv[data-d="1"]{transition-delay:.08s}.rv[data-d="2"]{transition-delay:.16s}.rv[data-d="3"]{transition-delay:.24s}
+
+/* ============== Section heading ============== */
+.sec{padding:clamp(70px,11vw,150px) 0}
+.eyebrow{font-family:var(--mono);font-weight:600;letter-spacing:.32em;text-transform:uppercase;
+  font-size:12px;color:var(--red);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:30px;height:1px;background:var(--red)}
+.h2{font-family:var(--display);font-weight:800;letter-spacing:-.01em;line-height:.96;
+  font-size:clamp(40px,7vw,98px);text-transform:uppercase;margin:.18em 0 0}
+.lead{max-width:var(--read);color:#3a3d44;font-size:clamp(16px,1.4vw,19px);margin-top:22px}
+
+/* ============== Next round ============== */
+.next{background:var(--ink);color:#fff;border-radius:28px;overflow:hidden;position:relative;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:0;margin-top:48px}
+.next::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(80% 120% at 100% 0,rgba(216,255,55,.12),transparent 55%)}
+.next__l{padding:clamp(34px,4vw,60px);position:relative;z-index:1}
+.tag{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:var(--ink);
+  background:var(--volt);padding:8px 16px;border-radius:100px}
+.spec{display:flex;align-items:flex-start;gap:6px;margin:26px 0 2px;font-family:var(--display);line-height:.8}
+.spec .s{font-weight:700;font-size:clamp(22px,3vw,34px);color:#fff;padding-top:.5em}
+.spec .n{font-weight:900;font-size:clamp(92px,16vw,200px);
+  background:linear-gradient(180deg,#fff,#ff7a72 130%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.when{font-family:var(--mono);font-weight:600;font-size:clamp(15px,1.4vw,18px);letter-spacing:.06em;color:var(--volt)}
+.next__r{padding:clamp(34px,4vw,60px);border-left:1px solid rgba(255,255,255,.1);
+  display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;z-index:1}
+.row{display:grid;grid-template-columns:128px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.row:first-child{padding-top:0}.row:last-child{border-bottom:0}
+.row dt{font-family:var(--mono);font-weight:500;letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:var(--smoke);padding-top:3px}
+.row dd{margin:0;font-weight:700;font-size:clamp(15px,1.4vw,17px)}
+
+/* ============== Archive gallery ============== */
+.head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1vw,16px);margin-top:52px}
+.card{position:relative;aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:var(--ink);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:20px;isolation:isolate;
+  transition:transform .5s var(--ease)}
+.card::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(120% 80% at 50% 0, hsl(var(--h) 80% 30%), transparent 60%),
+    linear-gradient(160deg, hsl(var(--h) 55% 18%), hsl(calc(var(--h) + 30) 60% 8%))}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;
+  background:repeating-linear-gradient(118deg,transparent 0 22px,rgba(255,255,255,.06) 22px 23px)}
+.card:hover{transform:translateY(-8px) rotate(-.6deg)}
+.card .yr{font-family:var(--mono);font-weight:500;letter-spacing:.18em;font-size:12px;color:rgba(255,255,255,.6)}
+.card .sp{font-family:var(--display);font-weight:900;font-size:clamp(28px,3vw,42px);color:#fff;line-height:1;margin-top:4px}
+.card .go{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(255,255,255,.1);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.2);transition:.4s var(--ease)}
+.card:hover .go{background:var(--volt);color:var(--ink);transform:rotate(45deg)}
+
+/* ============== Manifesto ============== */
+.manifesto{background:var(--ink);color:var(--paper);border-radius:28px;
+  padding:clamp(50px,9vw,130px) clamp(30px,6vw,90px);margin:clamp(40px,6vw,90px) 0;position:relative;overflow:hidden}
+.manifesto::before{content:"4WD";position:absolute;right:-2%;bottom:-14%;font-family:var(--display);
+  font-weight:900;font-size:clamp(160px,30vw,440px);color:rgba(255,255,255,.04);letter-spacing:-.04em}
+.manifesto q{font-family:var(--jp);font-weight:700;quotes:none;display:block;position:relative;z-index:1;
+  font-size:clamp(24px,3.6vw,52px);line-height:1.45;letter-spacing:.01em;max-width:16ch}
+.manifesto q b{color:var(--volt)}
+.manifesto .sign{position:relative;z-index:1;margin-top:34px;font-family:var(--mono);
+  letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--smoke)}
+
+/* ============== CTA / Footer ============== */
+.foot{padding:clamp(60px,9vw,120px) 0 50px}
+.cta{display:flex;align-items:center;flex-wrap:wrap;gap:24px;justify-content:space-between;
+  border-top:2px solid var(--ink);padding-top:40px}
+.cta h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(32px,5vw,72px);line-height:.95;margin:0}
+.btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;font-size:13px;background:var(--ink);color:#fff;padding:18px 30px;border-radius:100px;
+  transition:.4s var(--ease)}
+.btn:hover{background:var(--red);transform:translateX(6px)}
+.foot__btm{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;margin-top:70px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--smoke);text-transform:uppercase}
+
+/* ============== Responsive ============== */
+@media(max-width:900px){
+  .next{grid-template-columns:1fr;border-radius:22px}
+  .next__r{border-left:0;border-top:1px solid rgba(255,255,255,.1)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .hd nav{display:none}
+  .hero__slogan{margin-left:0}
+}
+@media(max-width:520px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .row{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="hd"><div class="wrap hd__in">
+  <a class="logo" href="#"><span class="dot"></span>MINI&nbsp;4WD</a>
+  <nav><a href="#next">Next</a><a href="#archive">Archive</a><a href="#join">Join</a></nav>
+</div></header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__media"><img src="mv.png" alt=""></div>
+    <div class="hero__streak"></div>
+    <div class="wrap hero__in">
+      <span class="kicker">From Nichinan City · Est. Study Club</span>
+      <h1>
+        <span class="l1">Mini</span>
+        <span class="l2">4<b>WD</b> Lab</span>
+      </h1>
+      <div class="hero__row">
+        <div class="hero__ja">ミニ四駆学習会<small>Manners Maketh Mini 4WD</small></div>
+        <p class="hero__slogan">勝ちより和に。正しさを。<br>正しさの先に、ほんとうの楽しさを。</p>
+      </div>
+    </div>
+    <span class="scroll">Scroll ↓</span>
+  </section>
+
+  <!-- NEXT ROUND -->
+  <section class="sec wrap" id="next">
+    <span class="eyebrow rv">Next Round</span>
+    <h2 class="h2 rv" data-d="1">次回開催</h2>
+    <div class="next rv" data-d="2">
+      <div class="next__l">
+        <span class="tag">● Now Accepting Soon</span>
+        <div class="spec"><span class="s">Spec</span><span class="n">12</span></div>
+        <div class="when">2027.04 — 開催予定</div>
+      </div>
+      <dl class="next__r">
+        <div class="row"><dt>Venue</dt><dd>まなびア（宮崎県日南市）</dd></div>
+        <div class="row"><dt>Class</dt><dd>レディース / ジュニア / オープン</dd></div>
+        <div class="row"><dt>Entry</dt><dd>クラスにより異なる</dd></div>
+        <div class="row"><dt>Info</dt><dd>詳細は決まり次第お知らせします</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ARCHIVE -->
+  <section class="sec wrap" id="archive">
+    <div class="head-row">
+      <div><span class="eyebrow rv">Archive</span><h2 class="h2 rv" data-d="1">開催記録</h2></div>
+      <p class="lead rv" data-d="2" style="margin:0;max-width:34ch">Spec1 から続く、これまでの全レースのアーカイブ。</p>
+    </div>
+    <div class="grid">
+      <a class="card rv" style="--h:8"  href="#"><span class="go">↗</span><span class="yr">2026</span><span class="sp">Spec11</span></a>
+      <a class="card rv" data-d="1" style="--h:265" href="#"><span class="go">↗</span><span class="yr">2025</span><span class="sp">Spec10</span></a>
+      <a class="card rv" data-d="2" style="--h:210" href="#"><span class="go">↗</span><span class="yr">2024</span><span class="sp">Spec9</span></a>
+      <a class="card rv" data-d="3" style="--h:150" href="#"><span class="go">↗</span><span class="yr">2023</span><span class="sp">Spec8</span></a>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="wrap">
+    <div class="manifesto rv">
+      <q>速さは、<b>礼節</b>の先にある。<br>整えること、待つこと、<br>讃えること。</q>
+      <div class="sign">— Mini 4WD Study, Nichinan</div>
+    </div>
+  </section>
+
+  <!-- CTA + FOOTER -->
+  <footer class="foot wrap" id="join">
+    <div class="cta">
+      <h3>Join the<br>next race.</h3>
+      <a class="btn" href="#">お問い合わせ →</a>
+    </div>
+    <div class="foot__btm">
+      <span>© Mini 4WD Study — Nichinan City</span>
+      <span>Facebook ／ X @mini4study</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.18});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
