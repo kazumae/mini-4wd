@@ -37,9 +37,11 @@ Text Domain: mini4wd
   --radius: 0px;
   --radius-input: 2px;
 
-  --container: 1120px;
-  --head: 'Oswald', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
-  --body: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', system-ui, -apple-system, 'Segoe UI', Meiryo, sans-serif;
+  --container: 1320px;
+  --read: 760px;
+  --display: 'Archivo Expanded', 'Zen Kaku Gothic New', system-ui, sans-serif;
+  --head: 'Saira', 'Zen Kaku Gothic New', system-ui, sans-serif;
+  --body: 'Zen Kaku Gothic New', system-ui, -apple-system, 'Segoe UI', Meiryo, sans-serif;
 }
 
 /* ===========================================================
@@ -394,3 +396,20 @@ ul { margin: 0; padding: 0; list-style: none; }
   .news__date { grid-column: 1 / -1; }
   .news__more { display: none; }
 }
+
+/* ===========================================================
+   REDESIGN Phase 1 — フォント刷新・大見出し・余白（後勝ちで上書き）
+   既存構造を保ったまま印象を一新。戻すにはこのブロックを削除。
+   =========================================================== */
+/* 大見出しは Archivo Expanded(ワイド) で特大に。日本語は Zen Kaku にフォールバック */
+.sec-head__ja, .page-hero__ja { font-family: var(--display); font-weight: 800; letter-spacing: -.01em; }
+.spec-big span, .spec-big strong, .detail-head__title { font-family: var(--display); }
+.sec-head__ja { font-size: clamp(28px, 4.2vw, 54px); }
+.page-hero__ja { font-size: clamp(34px, 5.2vw, 68px); }
+/* 英字ラベルは字間を開いてスポーツ感 */
+.sec-head__en, .page-hero__en, .badge, .spec-card__view, .news__date { letter-spacing: .26em; }
+/* 余白をゆとりへ（高密度の緩和） */
+.sec-head { padding: clamp(56px, 8vw, 104px) 0 22px; }
+.archive-teaser { padding-bottom: clamp(64px, 10vw, 120px); }
+.next { padding: clamp(24px, 4vw, 44px) 0 8px; }
+.news { padding: clamp(20px, 3vw, 40px) 0 8px; }

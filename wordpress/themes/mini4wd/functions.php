@@ -32,10 +32,10 @@ add_action('wp_enqueue_scripts', function () {
     $dir = get_stylesheet_directory();
     $uri = get_stylesheet_directory_uri();
 
-    // レース風の見出し用フォント（Oswald）
+    // 見出し=Archivo Expanded(可変ワイド) / ラベル・数字=Saira / 日本語=Zen Kaku Gothic New
     wp_enqueue_style(
         'm4-fonts',
-        'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@500;600;700;800;900&family=Saira:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap',
         [],
         null
     );
