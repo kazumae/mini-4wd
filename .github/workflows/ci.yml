@@ -1,0 +1,30 @@
+name: CI
+
+# PR時にPHPの構文チェック（php -l）を走らせ、壊れたコードのマージを防ぐ。
+# WordPressテーマはビルド不要なので、軽量な構文チェックのみ。
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax check (php -l)
+        run: |
+          php -v
+          err=0
+          while IFS= read -r f; do
+            if ! php -l "$f" >/dev/null 2>&1; then
+              echo "::error file=$f::PHP syntax error"
+              php -l "$f" || true
+              err=1
+            fi
+          done < <(find wordpress -name '*.php' -type f)
+          if [ "$err" -eq 0 ]; then
+            echo "✅ All PHP files passed php -l"
+          else
+            echo "❌ PHP syntax errors found"; exit 1
+          fi
