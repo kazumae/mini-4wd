@@ -6,5 +6,9 @@
 
 mini4wd.kazumae.net {
 	encode gzip
+	# デモ限定公開用のベーシック認証（id: kenxo）。パスワードは bcrypt ハッシュ。
+	basic_auth {
+		kenxo $2a$14$6git7hEb5I5PmAVJpP1dMuEv1W3ZswMc2yhF8JgW/QnsL.fq7VRS6
+	}
 	reverse_proxy wordpress:80
 }

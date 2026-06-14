@@ -27,4 +27,6 @@ jobs:
             git fetch --prune origin
             git reset --hard origin/main
             docker compose -f docker-compose.prod.yml up -d --build
+            # Caddyfile は volume マウントのため、設定変更を reload で反映（失敗時は restart）
+            docker compose -f docker-compose.prod.yml exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile || docker compose -f docker-compose.prod.yml restart caddy
             docker image prune -f
