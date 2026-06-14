@@ -1,0 +1,10 @@
+# Caddy — 自動HTTPS(Let's Encrypt) リバースプロキシ
+# WordPress(apache) へ転送。証明書は HTTP-01 で自動取得・自動更新。
+{
+	email kazu.maekawa@gmail.com
+}
+
+mini4wd.kazumae.net {
+	encode gzip
+	reverse_proxy wordpress:80
+}

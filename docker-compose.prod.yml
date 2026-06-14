@@ -1,0 +1,82 @@
+# Mini 4WD - 本番(デモ)用 Compose
+# Caddy(自動HTTPS/Let's Encrypt) + WordPress(php8.3-apache) + MySQL 8.4
+# MailHog は含めない（メールは mu-plugins-prod/disable-mail.php で無効化）
+# 使い方:
+#   cp .env.prod.example .env  # 実値(乱数パスワード等)を設定
+#   docker compose -f docker-compose.prod.yml up -d
+
+services:
+  # ─────────────────────────────────────────────
+  # リバースプロキシ + 自動HTTPS
+  # ─────────────────────────────────────────────
+  caddy:
+    image: caddy:2-alpine
+    container_name: mini4wd-caddy
+    restart: unless-stopped
+    depends_on:
+      - wordpress
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  # ─────────────────────────────────────────────
+  # データベース (MySQL 8.4 LTS) — 内部ネットワークのみ
+  # ─────────────────────────────────────────────
+  db:
+    image: mysql:8.4
+    container_name: mini4wd-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: ["--innodb-buffer-pool-size=128M"]   # 1GB RAM 向けに控えめ
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  # ─────────────────────────────────────────────
+  # WordPress (PHP 8.3 + Apache) — ホストにポート公開せず Caddy 経由
+  # ─────────────────────────────────────────────
+  wordpress:
+    image: wordpress:php8.3-apache
+    container_name: mini4wd-wordpress
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
+      # リバースプロキシ(Caddy)背後で HTTPS を認識させ、サイトURLを固定
+      WORDPRESS_CONFIG_EXTRA: |
+        if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') { $$_SERVER['HTTPS'] = 'on'; }
+        define('WP_HOME', 'https://${SITE_DOMAIN}');
+        define('WP_SITEURL', 'https://${SITE_DOMAIN}');
+    volumes:
+      - wp_data:/var/www/html
+      # 本番用 mu-plugins（メール無効化）。MailHog 用は読み込まない
+      - ./wordpress/mu-plugins-prod:/var/www/html/wp-content/mu-plugins
+      # カスタムテーマ（バージョン管理対象）
+      - ./wordpress/themes/mini4wd:/var/www/html/wp-content/themes/mini4wd
+
+volumes:
+  db_data:
+  wp_data:
+  caddy_data:
+  caddy_config:
