@@ -31,3 +31,16 @@ jobs:
             # caddy のみ force-recreate して Caddyfile の変更を確実に反映する（証明書は named volume で保持）。
             docker compose -f docker-compose.prod.yml up -d --force-recreate --no-deps caddy
             docker image prune -f
+
+      - name: Smoke test (本番疎通＋主要要素)
+        run: |
+          base="https://${{ secrets.BASIC_USER }}:${{ secrets.BASIC_PASS }}@mini4wd.kazumae.net"
+          code=000
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$base/")
+            [ "$code" = "200" ] && break
+            echo "retry $i: HTTP $code"; sleep 5
+          done
+          [ "$code" = "200" ] || { echo "FAIL: HTTP $code"; exit 1; }
+          curl -s "$base/" | grep -q 'class="hero__title"' || { echo "FAIL: hero not found"; exit 1; }
+          echo "Smoke OK: HTTP 200 + hero present"
