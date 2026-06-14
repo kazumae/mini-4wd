@@ -33,13 +33,13 @@ $next = [
 get_header();
 ?>
 
-<!-- ヒーロー -->
-<section class="hero">
-    <div class="container hero__inner">
-        <h1 class="hero__title"><?php echo esc_html($hero['title']); ?></h1>
-        <p class="hero__sub"><?php echo esc_html($hero['sub']); ?></p>
-        <p class="hero__tag"><?php echo esc_html($hero['tag']); ?></p>
-        <p class="hero__slogan"><?php echo esc_html($hero['slogan']); ?></p>
+<!-- ヒーロー（メインビジュアル画像 mv.png。文言は画像に焼き込み済み） -->
+<section class="hero hero--image">
+    <div class="container">
+        <img class="hero__img"
+             src="<?php echo esc_url(get_theme_file_uri('assets/images/mv.png')); ?>"
+             width="1806" height="871"
+             alt="<?php echo esc_attr($hero['title'] . ' ' . $hero['sub'] . ' — ' . $hero['tag']); ?>">
     </div>
 </section>
 

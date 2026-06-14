@@ -92,26 +92,26 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn .arw { margin-left: auto; padding-left: 8px; }
 
 /* ===========================================================
-   ヘッダー（フラット・直角）
+   ヘッダー（フラット・直角／ダーク = 黒基調）
    =========================================================== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: #fff; border-bottom: 1px solid var(--line);
+  background: var(--ink); border-bottom: 1px solid rgba(255,255,255,.10);
 }
 .site-header__inner { display: flex; align-items: center; gap: 18px; height: 60px; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand__mark {
   width: 36px; height: 36px; border-radius: 0;
-  background: var(--ink); color: #fff;
+  background: transparent; color: #fff;
   display: grid; place-items: center; flex: none;
 }
 .brand__text { display: flex; flex-direction: column; line-height: 1.1; }
-.brand__title { font-weight: 700; font-size: 16px; letter-spacing: .02em; }
-.brand__sub { font-family: var(--head); font-size: 10px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.brand__title { font-weight: 700; font-size: 16px; letter-spacing: .02em; color: #fff; }
+.brand__sub { font-family: var(--head); font-size: 10px; letter-spacing: .14em; color: #aeb3bc; text-transform: uppercase; }
 
 .nav { margin-left: auto; }
 .nav ul { display: flex; align-items: center; gap: 28px; }
-.nav a { font-size: 13.5px; font-weight: 600; color: #34383f; padding: 20px 0; position: relative; }
+.nav a { font-size: 13.5px; font-weight: 600; color: #e7e9ee; padding: 20px 0; position: relative; }
 .nav a.is-active { color: var(--red); }
 .nav a.is-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--red); }
 .nav a:not(.is-disabled):hover { color: var(--red); opacity: 1; }
@@ -120,46 +120,35 @@ ul { margin: 0; padding: 0; list-style: none; }
 .social { display: flex; align-items: center; gap: 8px; }
 .social a { width: 30px; height: 30px; border-radius: 0; display: grid; place-items: center; color: #fff; }
 .social .s-fb { background: var(--fb); }
-.social .s-x { background: #000; }
+.social .s-x { background: #000; border: 1px solid rgba(255,255,255,.22); }
 
 .nav-toggle { display: none; }
 
 /* ===========================================================
-   ヒーロー（全幅・ダークなレース背景にテキスト直接オーバーレイ）
+   ヒーロー（メインビジュアル画像 mv.png を全幅表示）
+   文言は画像に焼き込み済み。可変にしたい場合はテキストなし
+   背景画像 + .hero__inner オーバーレイ方式へ戻す。
    =========================================================== */
-.hero {
-  position: relative; color: #fff; overflow: hidden;
-  background:
-    linear-gradient(95deg, rgba(12,13,16,.92) 0%, rgba(12,13,16,.78) 42%, rgba(12,13,16,.30) 100%),
-    radial-gradient(120% 130% at 88% 18%, rgba(226,0,26,.32), transparent 52%),
-    repeating-linear-gradient(118deg, #14161b 0 26px, #1b1e25 26px 52px),
-    linear-gradient(160deg, #20242c, #0c0d10);
+.hero { position: relative; overflow: hidden; }
+.hero--image { line-height: 0; }
+/* 横幅はコンテンツ幅(.container)で固定。左右端はヘッダー・各セクションと揃う */
+.hero__img {
+  width: 100%; height: auto; display: block;
+  aspect-ratio: 1806 / 871;   /* mv.png 実寸比でCLS（レイアウトずれ）抑制 */
+  object-fit: cover;
 }
-/* 走路スピード感のための斜めストリーク */
-.hero::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background:
-    repeating-linear-gradient(118deg, transparent 0 70px, rgba(255,255,255,.035) 70px 72px),
-    radial-gradient(70% 120% at 100% 60%, rgba(226,0,26,.16), transparent 60%);
-}
-.hero__inner { position: relative; z-index: 1; padding: 78px 0 84px; max-width: 40em; }
-.hero__title { font-size: clamp(36px, 6.4vw, 60px); font-weight: 800; letter-spacing: .04em; line-height: 1.05; }
-.hero__sub { font-family: var(--head); font-size: clamp(15px, 2.4vw, 21px); letter-spacing: .16em; color: #e7e9ee; margin-top: 6px; text-transform: none; }
-.hero__tag { font-family: var(--head); font-style: italic; color: var(--gold); font-size: clamp(16px, 2.6vw, 24px); margin-top: 22px; font-weight: 500; letter-spacing: .03em; }
-.hero__slogan { margin-top: 16px; font-size: clamp(13px, 1.8vw, 15px); color: #d3d6dd; max-width: 30em; line-height: 1.9; }
 
 /* ===========================================================
    NEXT ROUND（角丸なし・影なしのソリッドな矩形／左右は同一ダーク面）
    =========================================================== */
-.next { padding: 30px 0 6px; }
+.next { padding: 0 0 6px; }   /* ヒーロー画像と密着させる */
 .next__grid { display: grid; grid-template-columns: 1fr 312px; gap: 20px; align-items: stretch; }
 
 /* 左：濃紺/黒のソリッドな矩形ブロック（左右は同一面・仕切りは細い罫線） */
 .next__main {
   position: relative; color: #fff; border-radius: 0; overflow: hidden;
-  background:
-    repeating-linear-gradient(118deg, #181b21 0 24px, #1e222a 24px 48px),
-    linear-gradient(180deg, #1a1d24, #131519);
+  /* 斜めストライプを廃止し、締まったソリッドな黒面に（カンプ準拠） */
+  background: linear-gradient(165deg, #1c1f27 0%, #0f1115 100%);
   display: grid; grid-template-columns: minmax(230px, .92fr) 1.08fr;
   border-left: 4px solid var(--red);
 }
@@ -184,7 +173,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .detail__value { font-size: 14px; color: #f1f2f5; font-weight: 600; }
 
 /* 右ペイン：ページ地（明るい面）の上にフラット配置。白い浮いたカードにしない */
-.next__side { background: transparent; border: 0; border-radius: 0; padding: 0 0 0 2px; display: flex; flex-direction: column; }
+/* 右ペインは左の黒カードと違いヒーローと密着させない。上余白で天端を揃える */
+.next__side { background: transparent; border: 0; border-radius: 0; padding: 28px 0 0 2px; display: flex; flex-direction: column; }
 .next__side h3 {
   font-size: 14px; letter-spacing: .03em; font-weight: 700;
   padding: 0 0 10px; margin: 0 0 4px;
@@ -386,13 +376,15 @@ ul { margin: 0; padding: 0; list-style: none; }
   .site-footer__inner { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
+  /* スマホはヒーロー画像を全幅表示にして最大化（左右のコンテナ余白を消す） */
+  .hero .container { padding-inline: 0; }
   .nav, .social { display: none; }
-  .nav.is-open { display: block; position: absolute; top: 60px; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--line); padding: 8px 22px 16px; }
+  .nav.is-open { display: block; position: absolute; top: 60px; left: 0; right: 0; background: var(--ink); border-bottom: 1px solid rgba(255,255,255,.10); padding: 8px 22px 16px; }
   .nav.is-open ul { flex-direction: column; align-items: flex-start; gap: 0; }
-  .nav.is-open a { display: block; width: 100%; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .nav.is-open a { display: block; width: 100%; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.10); }
   .nav.is-open a.is-active::after { display: none; }
-  .nav-toggle { display: grid; place-items: center; margin-left: auto; width: 40px; height: 40px; background: none; border: 1px solid var(--line-strong); border-radius: 0; gap: 4px; }
-  .nav-toggle span { width: 18px; height: 2px; background: var(--ink); display: block; }
+  .nav-toggle { display: grid; place-items: center; margin-left: auto; width: 40px; height: 40px; background: none; border: 1px solid rgba(255,255,255,.28); border-radius: 0; gap: 4px; }
+  .nav-toggle span { width: 18px; height: 2px; background: #fff; display: block; }
   .sec-head__lead, .page-hero__lead { display: none; }
   .spec-grid { grid-template-columns: repeat(2, 1fr); }
   .gallery-grid { grid-template-columns: repeat(3, 1fr); }
