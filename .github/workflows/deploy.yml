@@ -27,6 +27,7 @@ jobs:
             git fetch --prune origin
             git reset --hard origin/main
             docker compose -f docker-compose.prod.yml up -d --build
-            # Caddyfile は volume マウントのため、設定変更を reload で反映（失敗時は restart）
-            docker compose -f docker-compose.prod.yml exec -T caddy caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile || docker compose -f docker-compose.prod.yml restart caddy
+            # Caddyfile はファイル単位の bind mount のため、git更新で inode が変わると reload では反映されない。
+            # caddy のみ force-recreate して Caddyfile の変更を確実に反映する（証明書は named volume で保持）。
+            docker compose -f docker-compose.prod.yml up -d --force-recreate --no-deps caddy
             docker image prune -f
