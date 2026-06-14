@@ -10,6 +10,8 @@
 # 検証用アーティファクト（スクリーンショット等）
 .playwright-mcp/
 m4-*.png
+.secrets/
+.secrets/*
 
 # WordPress 本体とDBは名前付きボリューム管理のためリポジトリには含まれません
 # （カスタムテーマ wordpress/themes/mini4wd と mu-plugins はバージョン管理対象）
