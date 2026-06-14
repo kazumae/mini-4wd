@@ -170,5 +170,15 @@ get_header();
     </div>
 </section>
 
+<!-- マニフェスト -->
+<section class="manifesto-sec">
+    <div class="container">
+        <blockquote class="manifesto">
+            <q>速さは、<b>礼節</b>の先にある。<br>整えること、待つこと、讃えること。</q>
+            <div class="sign">— Mini 4WD Study, Nichinan</div>
+        </blockquote>
+    </div>
+</section>
+
 <?php
 get_footer();
